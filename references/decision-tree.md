@@ -14,30 +14,23 @@ Use this decision tree per dataset (not per page). The goal is consistent choice
 
 ```mermaid
 flowchart TD
-  A([Start]) --> B{"Is the data needed<br/>for the first render?"}
-
-  B -- No --> C["Client-side fetch<br/>or Suspense"]
-  B -- Yes --> D{"Does SEO/metadata<br/>depend on this data?"}
-
-  D -- Yes --> E[Server-side (metadata/SEO)]
-  D -- No --> F{Is the data user-specific?}
-
-  F -- No --> G{"Is the data static<br/>or semi-static?"}
-  F -- Yes --> H{"How slow is the request<br/>and how big is the payload?"}
-
-  G -- Yes --> I[SSG or ISR]
-  G -- No --> H
-
-  H -- "<= 300ms and <= 150kb" --> J[Blocking server fetch is OK]
-  H -- "300-700ms or 50-300kb" --> K["Server fetch + Suspense<br/>(streaming)"]
-  H -- ">= 700ms or >= 300kb" --> L["Suspense or<br/>client-side"]
-
-  I --> M{"Must the data remain<br/>interactive after load?"}
-  J --> M
-  K --> M
-
-  M -- No --> N([End])
-  M -- Yes --> O["Hybrid:<br/>server fetch + client hydrate"]
+  A([Start]) --> B{"Is the data needed<br/>for the first render?"};
+  B -- No --> C["Client-side fetch<br/>or Suspense"];
+  B -- Yes --> D{"Does SEO/metadata<br/>depend on this data?"};
+  D -- Yes --> E["Server-side (metadata/SEO)"];
+  D -- No --> F{"Is the data user-specific?"};
+  F -- No --> G{"Is the data static<br/>or semi-static?"};
+  F -- Yes --> H{"How slow is the request<br/>and how big is the payload?"};
+  G -- Yes --> I["SSG or ISR"];
+  G -- No --> H;
+  H -- "<= 300ms and <= 150kb" --> J["Blocking server fetch is OK"];
+  H -- "300-700ms or 50-300kb" --> K["Server fetch + Suspense<br/>(streaming)"];
+  H -- ">= 700ms or >= 300kb" --> L["Suspense or<br/>client-side"];
+  I --> M{"Must the data remain<br/>interactive after load?"};
+  J --> M;
+  K --> M;
+  M -- No --> N([End]);
+  M -- Yes --> O["Hybrid:<br/>server fetch + client hydrate"];
 ```
 
 ## Thresholds (Pragmatic Heuristics)
